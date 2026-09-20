@@ -25,7 +25,7 @@ function sendMessage() {
     // Create user's message
     const userMessage = document.createElement("div");
 
-    userMessage.classList.add("message");
+    userMessage.classList.add("message" , "user-message");
 
     userMessage.innerHTML = `
         <strong>You 👤</strong>
