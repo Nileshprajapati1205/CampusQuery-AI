@@ -114,29 +114,39 @@ body {
 /* Bot Message */
 
 .message {
-    max-width: 80%;
-
+    max-width: 75%;
     padding: 14px 16px;
+    margin-bottom: 18px;
 
-    border-radius: 12px;
-
-    margin-bottom: 15px;
+    border-radius: 14px;
 
     line-height: 1.5;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+
+/* AI Message */
+
 .bot-message {
-    background: #e8f0ff;
+    background: #f1f5f9;
+    color: #1f2937;
+
+    margin-right: auto;
 
     border-left: 4px solid #2563eb;
 }
+
+
+/* User Message */
+
 .user-message {
-    background: #2563eb;
-    color: white;
+    background: #eff6ff;
+    color: #1f2937;
 
     margin-left: auto;
 
-    border-radius: 12px 12px 2px 12px;
+    border-right: 4px solid #2563eb;
 }
 
 
