@@ -82,3 +82,52 @@ userInput.addEventListener("keydown", function(event) {
     }
 
 });
+// Show typing indicator
+
+const typingMessage = document.createElement("div");
+
+typingMessage.classList.add(
+    "message",
+    "typing-message"
+);
+
+typingMessage.id = "typingIndicator";
+
+typingMessage.innerHTML = `
+    <span class="typing-dot"></span>
+    <span class="typing-dot"></span>
+    <span class="typing-dot"></span>
+`;
+
+chatMessages.appendChild(typingMessage);
+
+
+// Simulate AI response
+
+setTimeout(() => {
+
+    typingMessage.remove();
+
+    const botMessage = document.createElement("div");
+
+    botMessage.classList.add(
+        "message",
+        "bot-message"
+    );
+
+    botMessage.innerHTML = `
+        <strong>CampusQuery AI 🤖</strong>
+
+        <p>
+            I received your question. My AI backend will answer this
+            once we connect the frontend with the RAG system.
+        </p>
+    `;
+
+    chatMessages.appendChild(botMessage);
+
+    // Scroll to latest message
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}, 1500);
