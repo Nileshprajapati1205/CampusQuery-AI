@@ -130,6 +130,14 @@ body {
 
     border-left: 4px solid #2563eb;
 }
+.user-message {
+    background: #2563eb;
+    color: white;
+
+    margin-left: auto;
+
+    border-radius: 12px 12px 2px 12px;
+}
 
 
 /* ==============================
