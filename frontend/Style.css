@@ -1,0 +1,171 @@
+/* ==============================
+   CampusQuery AI - Main Styles
+   ============================== */
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Page */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ==============================
+   Header
+   ============================== */
+
+.header {
+    background: #2563eb;
+    color: white;
+
+    padding: 18px 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+
+/* ==============================
+   Main Chat Container
+   ============================== */
+
+.chat-container {
+    width: 90%;
+    max-width: 850px;
+
+    margin: 30px auto;
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    flex: 1;
+}
+
+
+/* ==============================
+   Welcome Section
+   ============================== */
+
+.welcome-section {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.welcome-section h1 {
+    font-size: 28px;
+
+    margin-bottom: 10px;
+}
+
+.welcome-section p {
+    color: #6b7280;
+
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   Chat Messages
+   ============================== */
+
+.chat-messages {
+    min-height: 300px;
+
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border-radius: 12px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Bot Message */
+
+.message {
+    max-width: 80%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    margin-bottom: 15px;
+
+    line-height: 1.5;
+}
+
+.bot-message {
+    background: #e8f0ff;
+
+    border-left: 4px solid #2563eb;
+}
+
+
+/* ==============================
+   Input Section
+   ============================== */
+
+.input-section {
+    display: flex;
+
+    gap: 10px;
+}
+
+#userInput {
+    flex: 1;
+
+    padding: 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+#userInput:focus {
+    border-color: #2563eb;
+}
+
+
+/* Send Button */
+
+#sendButton {
+    padding: 14px 22px;
+
+    border: none;
+
+    border
