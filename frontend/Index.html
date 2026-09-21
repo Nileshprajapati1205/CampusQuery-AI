@@ -3,29 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>
-  // Chrome's "Request desktop site" ignores the viewport meta tag above and
-  // renders the page as if the screen were ~980px wide, then zooms out to
-  // fit — which inflates 100vh/100dvh and hides the mobile layout below.
-  // Detecting that and rewriting the viewport tag to the real screen width
-  // fixes both the oversized gap and the missing hamburger menu.
-  (function () {
-    var meta = document.querySelector('meta[name="viewport"]');
-    function fixViewport() {
-      var screenWidth = (window.screen && window.screen.width) || window.innerWidth;
-      if (window.innerWidth > screenWidth + 40) {
-        meta.setAttribute("content", "width=" + screenWidth + ", initial-scale=1, viewport-fit=cover");
-      }
-    }
-    fixViewport();
-    window.addEventListener("resize", fixViewport);
-  })();
-</script>
 <title>CampusQuery AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
