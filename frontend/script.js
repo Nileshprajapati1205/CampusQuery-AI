@@ -27,9 +27,9 @@
 
   /** In-memory app state, backed by sessionStorage/localStorage where noted. */
   const state = {
-    chats: loadJSON(sessionStorage, STORAGE_KEYS.chats, []),   // [{id, title, messages: [{role, html, source, id}]}]
+    chats: sanitizeChats(loadJSON(sessionStorage, STORAGE_KEYS.chats, [])),   // [{id, title, messages: [{role, html, source, id}]}]
     activeChatId: sessionStorage.getItem(STORAGE_KEYS.activeChat) || null,
-    savedAnswers: loadJSON(localStorage, STORAGE_KEYS.saved, []),
+    savedAnswers: sanitizeSavedAnswers(loadJSON(localStorage, STORAGE_KEYS.saved, [])),
     documents: buildMockDocuments(),
     documentFilter: "all",
     documentQuery: ""
@@ -38,10 +38,28 @@
   function loadJSON(store, key, fallback) {
     try {
       const raw = store.getItem(key);
-      return raw ? JSON.parse(raw) : fallback;
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      // Corrupted storage guard: if we expected an array, don't hand back
+      // something else (an object, a string, null) that later array
+      // operations (.find, .unshift, .filter) would throw on.
+      if (Array.isArray(fallback) && !Array.isArray(parsed)) return fallback;
+      return parsed;
     } catch (err) {
       return fallback;
     }
+  }
+
+  function sanitizeChats(chats) {
+    if (!Array.isArray(chats)) return [];
+    return chats.filter(
+      (c) => c && typeof c.id === "string" && Array.isArray(c.messages)
+    );
+  }
+
+  function sanitizeSavedAnswers(items) {
+    if (!Array.isArray(items)) return [];
+    return items.filter((a) => a && typeof a.id === "string" && typeof a.messageId === "string");
   }
   function saveChats() { sessionStorage.setItem(STORAGE_KEYS.chats, JSON.stringify(state.chats)); }
   function saveActiveChat() {
@@ -96,7 +114,12 @@
   /* ===================== 3. VIEW SWITCHING + MOBILE DRAWER ===================== */
 
   function switchView(viewName) {
-    dom.navItems.forEach((btn) => btn.classList.toggle("is-active", btn.dataset.view === viewName));
+    dom.navItems.forEach((btn) => {
+      const active = btn.dataset.view === viewName;
+      btn.classList.toggle("is-active", active);
+      if (active) btn.setAttribute("aria-current", "page");
+      else btn.removeAttribute("aria-current");
+    });
     dom.views.forEach((section) => section.classList.toggle("is-active", section.dataset.viewPanel === viewName));
     closeSidebar();
     if (viewName === "documents") renderDocuments();
@@ -258,24 +281,30 @@
 
   async function handleSend(text) {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed || dom.messageInput.disabled) return;
 
     addMessage("user", escapeHTML(trimmed));
     dom.messageInput.value = "";
     autoGrowTextarea();
     updateSendButtonState();
 
+    dom.messageInput.disabled = true;
+    dom.sendBtn.disabled = true;
+
     showTypingIndicator();
     try {
       const response = await sendMessageToAI(trimmed);
-      hideTypingIndicator();
       addMessage("ai", response.html, response.source);
     } catch (err) {
-      hideTypingIndicator();
       addMessage(
         "ai",
         '<p>Something went wrong while reaching CampusQuery AI. Please try again in a moment.</p>'
       );
+    } finally {
+      hideTypingIndicator();
+      dom.messageInput.disabled = false;
+      updateSendButtonState();
+      dom.messageInput.focus();
     }
   }
 
@@ -500,20 +529,31 @@
     if (existingIndex > -1) {
       state.savedAnswers.splice(existingIndex, 1);
       showToast("Removed from saved answers");
-    } else {
-      const chat = getActiveChat();
-      const msgIndex = chat.messages.findIndex((m) => m.id === msg.id);
-      const question = msgIndex > 0 ? stripHTML(chat.messages[msgIndex - 1].html) : "Question";
-      state.savedAnswers.unshift({
-        id: uid(),
-        messageId: msg.id,
-        question: question,
-        answerPreview: stripHTML(msg.html).slice(0, 140),
-        source: msg.source,
-        date: new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
-      });
-      showToast("Answer saved");
+      saveSavedAnswers();
+      return;
     }
+
+    const chat = getActiveChat();
+    if (!chat) return;
+
+    const msgIndex = chat.messages.findIndex((m) => m.id === msg.id);
+    let question = "Question";
+    for (let i = msgIndex - 1; i >= 0; i--) {
+      if (chat.messages[i].role === "user") {
+        question = stripHTML(chat.messages[i].html);
+        break;
+      }
+    }
+
+    state.savedAnswers.unshift({
+      id: uid(),
+      messageId: msg.id,
+      question: question,
+      answerPreview: stripHTML(msg.html).slice(0, 140),
+      source: msg.source,
+      date: new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+    });
+    showToast("Answer saved");
     saveSavedAnswers();
   }
 
