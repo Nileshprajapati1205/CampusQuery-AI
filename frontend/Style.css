@@ -656,6 +656,7 @@ p { margin: 0; }
 }
 .composer__input:focus-visible { outline: none; }
 .composer__input::placeholder { color: var(--color-text-faint); }
+.composer__input:disabled { opacity: 0.55; }
 
 .composer__send {
   width: 38px;
