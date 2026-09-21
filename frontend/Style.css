@@ -140,7 +140,7 @@ p { margin: 0; }
 
 .app {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -363,7 +363,7 @@ p { margin: 0; }
   min-width: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .view {
@@ -975,7 +975,7 @@ p { margin: 0; }
    Responsive
    ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .mobile-bar { display: flex; }
 
   .app { height: 100dvh; }
